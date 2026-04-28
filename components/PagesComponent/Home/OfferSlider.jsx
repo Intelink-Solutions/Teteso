@@ -12,7 +12,7 @@ import { userSignUpData } from "@/redux/reducer/authSlice";
 import { useSelector } from "react-redux";
 import CustomLink from "@/components/Common/CustomLink";
 import { getIsRtl } from "@/redux/reducer/languageSlice";
-import { placeholderImage } from "@/utils";
+import { normalizeImageUrl, placeholderImage } from "@/utils";
 
 const OfferSlider = ({ Slider }) => {
   const [api, setApi] = useState();
@@ -70,7 +70,7 @@ const OfferSlider = ({ Slider }) => {
                     target={ele?.model_type === null ? "_blank" : ""}
                   >
                     <Image
-                      src={ele.image}
+                      src={normalizeImageUrl(ele?.image)}
                       alt="slider imag"
                       width={983}
                       height={493}
