@@ -24,6 +24,10 @@ const nextConfig = {
     ],
   },
   images: {
+    // Backend currently returns image paths with double slashes in pathname (e.g. //storage/...)
+    // which can cause Vercel image optimizer to reject requests. Keep images visible by
+    // bypassing optimizer until backend URL normalization is fully fixed.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 3600,
     remotePatterns: [

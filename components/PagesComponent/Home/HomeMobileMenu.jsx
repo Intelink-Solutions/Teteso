@@ -115,7 +115,7 @@ const HomeMobileMenu = ({
             </li>
 
             {/* not render on ads page because page have category filter already and to avoid api calls when language changes */}
-            {!adsPage && <FilterTree />}
+            {!adsPage && <FilterTree isMobileMenu />}
           </div>
         </div>
       </SheetContent>

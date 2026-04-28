@@ -3,12 +3,13 @@ import { categoryApi } from "@/utils/api";
 import { Loader2, Minus, Plus } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { t } from "@/utils";
+import { placeholderImage, t } from "@/utils";
 import { useSelector } from "react-redux";
 import { BreadcrumbPathData } from "@/redux/reducer/breadCrumbSlice";
 import { CurrentLanguageData } from "@/redux/reducer/languageSlice";
+import Image from "next/image";
 
-const FilterTree = ({ extraDetails }) => {
+const FilterTree = ({ extraDetails, isMobileMenu = false }) => {
   const CurrentLanguage = useSelector(CurrentLanguageData);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -69,14 +70,18 @@ const FilterTree = ({ extraDetails }) => {
   };
 
   return (
-    <ul>
+    <ul className={cn(isMobileMenu && "space-y-2")}>
       <li>
-        <div className="flex items-center rounded text-sm">
+        <div className="flex items-center rounded text-sm gap-1">
           {categories?.isLoading ? (
             <Loader2 className="size-[14px] animate-spin text-muted-foreground" />
           ) : (
             <button
-              className="text-sm p-1 hover:bg-muted rounded-sm"
+              className={cn(
+                "text-sm p-1 hover:bg-muted rounded-sm",
+                isMobileMenu &&
+                  "h-9 w-9 inline-flex items-center justify-center border"
+              )}
               onClick={handleToggleExpand}
             >
               {categories.expanded ? <Minus size={14} /> : <Plus size={14} />}
@@ -87,6 +92,8 @@ const FilterTree = ({ extraDetails }) => {
             onClick={handleClick}
             className={cn(
               "flex-1 ltr:text-left rtl:text-right py-1 px-2 rounded-sm",
+              isMobileMenu &&
+                "h-10 border border-input bg-background font-medium rounded-md",
               isSelected && "border bg-muted"
             )}
           >
@@ -94,12 +101,19 @@ const FilterTree = ({ extraDetails }) => {
           </button>
         </div>
         {categories.expanded && categories.data.length > 0 && (
-          <ul className="ltr:ml-3 rtl:mr-3 ltr:border-l rtl:border-r ltr:pl-2 rtl:pr-2 space-y-1">
+          <ul
+            className={cn(
+              "ltr:ml-3 rtl:mr-3 ltr:border-l rtl:border-r ltr:pl-2 rtl:pr-2 space-y-1",
+              isMobileMenu && "ltr:ml-0 rtl:mr-0 border-none ltr:pl-0 rtl:pr-0"
+            )}
+          >
             {categories.data.map((category) => (
               <CategoryNode
                 key={category.id}
                 category={category}
                 extraDetails={extraDetails}
+                isMobileMenu={isMobileMenu}
+                depth={0}
               />
             ))}
 
@@ -121,7 +135,7 @@ const FilterTree = ({ extraDetails }) => {
 
 export default FilterTree;
 
-const CategoryNode = ({ category, extraDetails }) => {
+const CategoryNode = ({ category, extraDetails, isMobileMenu = false, depth = 0 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
@@ -193,13 +207,17 @@ const CategoryNode = ({ category, extraDetails }) => {
 
   return (
     <li>
-      <div className="flex items-center rounded text-sm">
+      <div className="flex items-center rounded text-sm gap-1">
         {category.subcategories_count > 0 &&
           (isLoading ? (
             <Loader2 className="size-[14px] animate-spin text-muted-foreground" />
           ) : (
             <button
-              className="text-sm p-1 hover:bg-muted rounded-sm"
+              className={cn(
+                "text-sm p-1 hover:bg-muted rounded-sm",
+                isMobileMenu &&
+                  "h-9 w-9 inline-flex items-center justify-center border"
+              )}
               onClick={handleToggleExpand}
             >
               {expanded ? <Minus size={14} /> : <Plus size={14} />}
@@ -210,20 +228,44 @@ const CategoryNode = ({ category, extraDetails }) => {
           onClick={handleClick}
           className={cn(
             "flex-1 ltr:text-left rtl:text-right py-1 px-2 rounded-sm flex items-center justify-between gap-2",
+            isMobileMenu &&
+              "h-10 border border-input bg-background rounded-md font-medium",
+            isMobileMenu && depth === 0 && "h-12",
             isSelected && "border bg-muted"
           )}
         >
-          <span className="break-all">{category.translated_name}</span>
+          <span className="flex items-center gap-2 min-w-0">
+            {isMobileMenu && depth === 0 && category?.image ? (
+              <Image
+                src={category.image}
+                alt={category.translated_name || category.name || "Category"}
+                width={22}
+                height={22}
+                className="h-[22px] w-[22px] rounded object-cover shrink-0"
+                onErrorCapture={placeholderImage}
+              />
+            ) : null}
+            <span className="truncate">{category.translated_name}</span>
+          </span>
           <span>({category.all_items_count})</span>
         </button>
       </div>
 
       {expanded && (
-        <ul className="ltr:ml-3 rtl:mr-3 ltr:border-l rtl:border-r ltr:pl-2 rtl:pr-2 space-y-1">
+        <ul
+          className={cn(
+            "ltr:ml-3 rtl:mr-3 ltr:border-l rtl:border-r ltr:pl-2 rtl:pr-2 space-y-1",
+            isMobileMenu &&
+              "ltr:ml-1 rtl:mr-1 border-none ltr:pl-0 rtl:pr-0 mt-1"
+          )}
+        >
           {subcategories.map((sub) => (
             <CategoryNode
               key={sub.id}
               category={sub}
+              extraDetails={extraDetails}
+              isMobileMenu={isMobileMenu}
+              depth={depth + 1}
               selectedSlug={selectedSlug}
             />
           ))}
