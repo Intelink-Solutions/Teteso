@@ -13,8 +13,24 @@ const manrope = Manrope({
 
 export const generateMetadata = async () => {
   try {
+    const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+    const endPoint = (process.env.NEXT_PUBLIC_END_POINT || "/api/").replace(/^\/?/, "/");
+
+    if (!apiUrl) {
+      return {
+        title: process.env.NEXT_PUBLIC_META_TITLE,
+        description: process.env.NEXT_PUBLIC_META_DESCRIPTION,
+        keywords: process.env.NEXT_PUBLIC_META_kEYWORDS,
+        openGraph: {
+          title: process.env.NEXT_PUBLIC_META_TITLE,
+          description: process.env.NEXT_PUBLIC_META_DESCRIPTION,
+          keywords: process.env.NEXT_PUBLIC_META_kEYWORDS,
+        },
+      };
+    }
+
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${process.env.NEXT_PUBLIC_END_POINT}get-system-settings`
+      `${apiUrl}${endPoint}get-system-settings`
     );
     const data = await res.json();
     const favicon = data?.data?.favicon_icon;

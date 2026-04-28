@@ -1,6 +1,7 @@
 export default async function sitemap() {
-  const baseUrl = process.env.NEXT_PUBLIC_WEB_URL;
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseUrl = (process.env.NEXT_PUBLIC_WEB_URL || "").replace(/\/$/, "");
+  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+  const endPoint = (process.env.NEXT_PUBLIC_END_POINT || "/api/").replace(/^\/?/, "/");
 
   const staticRoutes = [
     "about-us",
@@ -44,8 +45,12 @@ export default async function sitemap() {
   // Fetch only first page of products
   let productEntries = [];
   try {
+    if (!apiUrl || !baseUrl) {
+      return [baseEntry, ...staticSitemapEntries].filter((item) => item.url);
+    }
+
     const res = await fetch(
-      `${apiUrl}${process.env.NEXT_PUBLIC_END_POINT}get-item?page=1`,
+      `${apiUrl}${endPoint}get-item?page=1`,
       { next: { revalidate: 604800 } } // Revalidate weekly
     );
 
@@ -67,7 +72,7 @@ export default async function sitemap() {
   let categoryEntries = [];
   try {
     const res = await fetch(
-      `${apiUrl}${process.env.NEXT_PUBLIC_END_POINT}get-categories?page=1`,
+      `${apiUrl}${endPoint}get-categories?page=1`,
       { next: { revalidate: 604800 } } // Revalidate weekly
     );
 
@@ -89,7 +94,7 @@ export default async function sitemap() {
   let blogEntries = [];
   try {
     const res = await fetch(
-      `${apiUrl}${process.env.NEXT_PUBLIC_END_POINT}blogs?page=1`,
+      `${apiUrl}${endPoint}blogs?page=1`,
       { next: { revalidate: 604800 } } // Revalidate weekly
     );
 
@@ -113,5 +118,5 @@ export default async function sitemap() {
     ...productEntries,
     ...categoryEntries,
     ...blogEntries,
-  ];
+  ].filter((item) => item.url);
 }
