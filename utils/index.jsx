@@ -40,6 +40,20 @@ export const placeholderImage = (e) => {
     e.target.src = fallback;
   }
 };
+
+export const normalizeImageUrl = (value) => {
+  if (typeof value !== "string" || !/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  try {
+    const parsed = new URL(value);
+    parsed.pathname = parsed.pathname.replace(/\/{2,}/g, "/");
+    return parsed.toString();
+  } catch {
+    return value;
+  }
+};
 // check user login
 // is login user check
 export const isLogin = () => {

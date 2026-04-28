@@ -7,7 +7,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { placeholderImage, t } from "@/utils";
+import { normalizeImageUrl, placeholderImage, t } from "@/utils";
 import Image from "next/image";
 import CustomLink from "@/components/Common/CustomLink";
 import { useEffect, useRef, useState } from "react";
@@ -89,7 +89,7 @@ const HeaderCategories = ({ cateData }) => {
                           <div className="w-[20%] p-4 bg-muted">
                             <div className="flex gap-1">
                               <Image
-                                src={category?.image}
+                                src={normalizeImageUrl(category?.image)}
                                 alt={category?.translated_name}
                                 width={22}
                                 height={22}

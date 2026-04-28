@@ -3,6 +3,7 @@ import {
   formatDate,
   formatPriceAbbreviated,
   formatSalaryRange,
+  normalizeImageUrl,
   placeholderImage,
   t,
 } from "@/utils";
@@ -67,7 +68,7 @@ const ProductHorizontalCard = ({ item, handleLike }) => {
       className="border p-2 rounded-md flex items-center gap-2 sm:gap-4 w-full relative"
     >
       <Image
-        src={item?.image || placeHolderImg}
+        src={normalizeImageUrl(item?.image) || normalizeImageUrl(placeHolderImg)}
         width={219}
         height={190}
         alt="Product"

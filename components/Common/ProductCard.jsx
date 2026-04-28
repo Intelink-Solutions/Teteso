@@ -3,6 +3,7 @@ import {
   formatDate,
   formatPriceAbbreviated,
   formatSalaryRange,
+  normalizeImageUrl,
   placeholderImage,
   t,
 } from "@/utils";
@@ -68,7 +69,7 @@ const ProductCard = ({ item, handleLike }) => {
     >
       <div className="relative">
         <Image
-          src={item?.image || placeholderImg}
+          src={normalizeImageUrl(item?.image) || normalizeImageUrl(placeholderImg)}
           width={288}
           height={249}
           alt="Product"

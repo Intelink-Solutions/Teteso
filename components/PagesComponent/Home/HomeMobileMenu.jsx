@@ -6,7 +6,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { placeholderImage, t } from "@/utils";
+import { normalizeImageUrl, placeholderImage, t } from "@/utils";
 import Image from "next/image";
 import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -65,7 +65,7 @@ const HomeMobileMenu = ({
         <SheetHeader className="py-4 px-6 border-b border">
           <SheetTitle>
             <Image
-              src={settings?.header_logo}
+              src={normalizeImageUrl(settings?.header_logo)}
               width={195}
               height={92}
               alt="Logo"

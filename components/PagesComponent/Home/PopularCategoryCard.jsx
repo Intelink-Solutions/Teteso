@@ -1,4 +1,4 @@
-import { placeholderImage } from "@/utils";
+import { normalizeImageUrl, placeholderImage } from "@/utils";
 import Image from "next/image";
 import CustomLink from "@/components/Common/CustomLink";
 
@@ -10,7 +10,7 @@ const PopularCategoryCard = ({ item }) => {
     >
       <div className="border p-2.5 rounded-full">
         <Image
-          src={item?.image}
+          src={normalizeImageUrl(item?.image)}
           width={96}
           height={96}
           className="aspect-square w-full rounded-full"
