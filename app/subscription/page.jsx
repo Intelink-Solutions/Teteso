@@ -2,7 +2,18 @@ import Subscription from "@/components/PagesComponent/Subscription/Subscription"
 import axios from "axios";
 
 export const generateMetadata = async () => {
-    const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}${process.env.NEXT_PUBLIC_END_POINT}seo-settings?page=subscription`;
+    const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+    const endPoint = (process.env.NEXT_PUBLIC_END_POINT || "/api/").replace(/^\/?/, "/");
+
+    if (!apiUrl) {
+        return {
+            title: process.env.NEXT_PUBLIC_META_TITLE,
+            description: process.env.NEXT_PUBLIC_META_DESCRIPTION,
+            keywords: process.env.NEXT_PUBLIC_META_kEYWORDS,
+        };
+    }
+
+    const fetchUrl = `${apiUrl}${endPoint}seo-settings?page=subscription`;
     try {
         const response = await axios.get(fetchUrl);
         const subscription = response?.data?.data[0]
