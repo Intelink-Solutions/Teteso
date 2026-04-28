@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { store } from "../store";  // Ensure this import path is correct
+
+const getReduxStore = () => globalThis.__APP_REDUX_STORE__;
 
 const initialState = {
     data: null,
@@ -26,13 +27,16 @@ export const { updateDataSuccess, userUpdateData, userLogout } = authSlice.actio
 export default authSlice.reducer;
 
 export const loadUpdateData = (data) => {
-    store.dispatch(updateDataSuccess(data));
+    const store = getReduxStore();
+    store?.dispatch(updateDataSuccess(data));
 };
 export const loadUpdateUserData = (data) => {
-    store.dispatch(userUpdateData({ data }));
+    const store = getReduxStore();
+    store?.dispatch(userUpdateData({ data }));
 };
 export const logoutSuccess = () => {
-    store.dispatch(userLogout());
+    const store = getReduxStore();
+    store?.dispatch(userLogout());
 };
 
 

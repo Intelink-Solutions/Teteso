@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { store } from "../store";
+
+const getReduxStore = () => globalThis.__APP_REDUX_STORE__;
 
 const initialState = {
   IsLoginModalOpen: false,
@@ -61,15 +62,18 @@ export const getIsShowBankDetails = createSelector(
 );
 
 export const setIsLoginOpen = (value) => {
-  store.dispatch(setIsLoginModalOpen(value));
+  const store = getReduxStore();
+  store?.dispatch(setIsLoginModalOpen(value));
 };
 
 export const showBankDetails = () => {
-  store.dispatch(setIsShowBankDetails(true));
+  const store = getReduxStore();
+  store?.dispatch(setIsShowBankDetails(true));
 };
 
 export const hideBankDetails = () => {
-  store.dispatch(setIsShowBankDetails(false));
+  const store = getReduxStore();
+  store?.dispatch(setIsShowBankDetails(false));
 };
 
 export const getNotification = createSelector(

@@ -47,4 +47,6 @@ export const store = configureStore({
   ],
 });
 
+globalThis.__APP_REDUX_STORE__ = store;
+
 export const persistor = persistStore(store);

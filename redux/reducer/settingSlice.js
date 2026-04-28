@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { store } from "../store";
+
+const getReduxStore = () => globalThis.__APP_REDUX_STORE__;
 
 const initialState = {
   data: null,
@@ -27,7 +28,8 @@ export default settingsSlice.reducer;
 
 // Action to store token
 export const getFcmToken = (data) => {
-  store.dispatch(getToken({ data }));
+  const store = getReduxStore();
+  store?.dispatch(getToken({ data }));
 };
 
 // Selectors
