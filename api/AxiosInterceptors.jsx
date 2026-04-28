@@ -3,6 +3,43 @@ import { setIsUnauthorized } from "@/redux/reducer/globalStateSlice";
 import { store } from "@/redux/store";
 import axios from "axios";
 
+const normalizeAbsoluteUrlPath = (value) => {
+  if (typeof value !== "string" || !/^https?:\/\//i.test(value)) {
+    return value;
+  }
+
+  try {
+    const url = new URL(value);
+    const normalizedPath = url.pathname.replace(/\/{2,}/g, "/");
+
+    if (normalizedPath !== url.pathname) {
+      url.pathname = normalizedPath;
+      return url.toString();
+    }
+
+    return value;
+  } catch {
+    return value;
+  }
+};
+
+const normalizeUrlsInPayload = (payload) => {
+  if (Array.isArray(payload)) {
+    return payload.map(normalizeUrlsInPayload);
+  }
+
+  if (payload && typeof payload === "object") {
+    return Object.fromEntries(
+      Object.entries(payload).map(([key, value]) => [
+        key,
+        normalizeUrlsInPayload(value),
+      ])
+    );
+  }
+
+  return normalizeAbsoluteUrlPath(payload);
+};
+
 const Api = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_URL}${process.env.NEXT_PUBLIC_END_POINT}`,
 });
@@ -28,6 +65,9 @@ Api.interceptors.request.use(function (config) {
 // Add a response interceptor
 Api.interceptors.response.use(
   function (response) {
+    if (response?.data) {
+      response.data = normalizeUrlsInPayload(response.data);
+    }
     return response;
   },
   function (error) {
