@@ -13,7 +13,7 @@ import { createStickyNote, t } from ".";
 import { getFcmToken } from "@/redux/reducer/settingSlice";
 
 const FirebaseData = () => {
-  let firebaseConfig = {
+  const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
@@ -27,11 +27,9 @@ const FirebaseData = () => {
     firebase.initializeApp(firebaseConfig);
   }
 
-  const app = initializeApp(firebaseConfig);
+  const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
   const authentication = getAuth(app);
-  const firebaseApp = !getApps().length
-    ? initializeApp(firebaseConfig)
-    : getApp();
+  const firebaseApp = app;
 
   const messagingInstance = async () => {
     try {
