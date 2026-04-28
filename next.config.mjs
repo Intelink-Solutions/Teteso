@@ -41,6 +41,12 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "teteso.veewiss.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "teteso.com",
         port: "",
         pathname: "/**",

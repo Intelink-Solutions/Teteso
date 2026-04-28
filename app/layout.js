@@ -2,7 +2,6 @@ import { Manrope } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/redux/store/providers";
 import { Toaster } from "@/components/ui/sonner";
-import Script from "next/script";
 import CurrencyProvider from "@/components/CurrencyProvider";
 
 const manrope = Manrope({
@@ -61,10 +60,6 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="http://127.0.0.1:8000" />
         <link rel="dns-prefetch" href="http://127.0.0.1:8000" />
-        <Script
-          src="https://js.paystack.co/v1/inline.js"
-          strategy="lazyOnload"
-        />
         {/* <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxx"
           crossOrigin="anonymous" strategy="afterInteractive" /> */}
       </head>
